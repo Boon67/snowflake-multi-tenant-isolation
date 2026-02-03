@@ -20,7 +20,7 @@ A production-ready implementation of multi-tenant data isolation in Snowflake us
 - [Production Considerations](#-production-considerations)
 - [Troubleshooting](#-troubleshooting)
 
----
+----
 
 ## 🎯 Overview
 
