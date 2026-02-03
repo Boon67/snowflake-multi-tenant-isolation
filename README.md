@@ -231,23 +231,23 @@ graph TB
     end
     
     subgraph "2. Set Session Context"
-        C --> E[SET current_org_id = 'org_123']
-        D --> F["SET current_app_ids = '[\"app_1\", \"app_2\"]'"]
+        C --> E["SET current_org_id = 'org_123'"]
+        D --> F["SET current_app_ids = array"]
     end
     
     subgraph "3. Row Access Policy Evaluation"
         E --> G{Policy Check}
         F --> G
         G -->|org_id Match?| H{app_id Match?}
-        H -->|Both Match| I[✅ Return Row]
-        H -->|No Match| J[❌ Filter Out]
+        H -->|Both Match| I[Return Row]
+        H -->|No Match| J[Filter Out]
         G -->|No Match| J
     end
     
     subgraph "4. Query Results"
         I --> K[Filtered Data]
         J --> L[Row Excluded]
-        K --> M[User Sees Only:<br/>- Their org data<br/>- Their allowed apps]
+        K --> M["User Sees Only:<br/>- Their org data<br/>- Their allowed apps"]
     end
     
     style A fill:#e1f5ff
