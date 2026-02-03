@@ -44,10 +44,57 @@ print_header() {
 }
 
 # Check if snow CLI is installed
+print_info "Checking for Snow CLI..."
 if ! command -v snow &> /dev/null; then
-    print_error "Snow CLI is not installed. Please install it first:"
-    echo "  pip install snowflake-cli-labs"
+    print_error "Snow CLI is not installed!"
+    echo ""
+    echo "The Snow CLI is required to deploy this project."
+    echo ""
+    echo "Installation instructions:"
+    echo "  1. Install via pip:"
+    echo "     pip install snowflake-cli-labs"
+    echo ""
+    echo "  2. Or via pipx (recommended):"
+    echo "     pipx install snowflake-cli-labs"
+    echo ""
+    echo "  3. Configure a connection:"
+    echo "     snow connection add"
+    echo ""
+    echo "For more information, visit:"
+    echo "  https://docs.snowflake.com/en/developer-guide/snowflake-cli/index"
+    echo ""
     exit 1
+fi
+
+print_success "Snow CLI is installed ($(snow --version 2>&1 | head -n 1))"
+
+# List available connections
+print_info "Checking Snow CLI connections..."
+if snow connection list > /dev/null 2>&1; then
+    echo ""
+    echo "Available Snowflake connections:"
+    echo "────────────────────────────────────────────────────────────────"
+    snow connection list
+    echo "────────────────────────────────────────────────────────────────"
+    echo ""
+    print_info "Using default connection (or set with: snow connection set-default <name>)"
+    echo ""
+else
+    print_warning "No connections configured!"
+    echo ""
+    echo "You need to configure a Snowflake connection first:"
+    echo "  snow connection add"
+    echo ""
+    read -p "Would you like to configure a connection now? (y/n) " -n 1 -r
+    echo ""
+    if [[ $REPLY =~ ^[Yy]$ ]]; then
+        snow connection add
+        echo ""
+        print_success "Connection configured"
+    else
+        print_error "Cannot proceed without a configured connection"
+        exit 1
+    fi
 fi
 
 # Get the directory where this script is located
@@ -104,12 +151,20 @@ for script in "${SQL_SCRIPTS[@]}"; do
 done
 print_success "All SQL files found"
 
-# Optional: Check Snow CLI connection
+# Test Snow CLI connection
 print_info "Testing Snow CLI connection..."
 if snow connection test > /dev/null 2>&1; then
-    print_success "Snow CLI connection successful"
+    print_success "Snow CLI connection test successful"
 else
-    print_warning "Could not verify Snow CLI connection. Proceeding anyway..."
+    print_error "Snow CLI connection test failed!"
+    echo ""
+    echo "Please verify your connection configuration:"
+    echo "  snow connection test"
+    echo ""
+    echo "Or configure a new connection:"
+    echo "  snow connection add"
+    echo ""
+    exit 1
 fi
 
 # Ask for confirmation
