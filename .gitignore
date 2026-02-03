@@ -1,0 +1,19 @@
+# Configuration files with sensitive data
+config.conf
+*.conf
+!*.conf.example
+!default.conf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log

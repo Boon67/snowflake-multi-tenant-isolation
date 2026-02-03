@@ -1,0 +1,25 @@
+# Example Custom Configuration
+# 
+# Copy this file to 'config.conf' and customize for your environment
+# Usage: ./deploy.sh config.conf
+
+# Database Configuration
+DATABASE_NAME=MY_ANALYTICS_DB
+SCHEMA_NAME=ANALYTICS
+
+# Warehouse Configuration
+WAREHOUSE_NAME=MY_WAREHOUSE
+WAREHOUSE_SIZE=MEDIUM
+WAREHOUSE_AUTO_SUSPEND=300
+WAREHOUSE_AUTO_RESUME=TRUE
+
+# Clustering Configuration
+# Enable clustering for production with large datasets
+CREATE_CLUSTERING=TRUE
+AUTO_RECLUSTER_ENABLED=TRUE
+
+# Sample Data Configuration
+INSERT_SAMPLE_DATA=FALSE
+
+# Testing Configuration
+RUN_TESTS=FALSE
